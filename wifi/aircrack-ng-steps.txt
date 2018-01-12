@@ -1,0 +1,30 @@
+1.) Acquire a(n) Kali Linux .iso disk image and put it on a virtual machine. Or if you are running Debian based or Ubuntu based, run sudo apt-get install aircrack-ng reaver wifite
+
+2.) Once you have acquired those tools, you have to put your current NIC into monitoring mode, to do that run the command
+# airmon-ng start <NIC_INTERFACE_ID>
+
+3.) Once you have ran that command, you have to see what ACPS (Access Points) are available (as well as their encryption, channel, BSSID, ESSID, etc) so run the command
+# airodump-ng <MONITORING_INTERFACE>
+
+- Open a new Linux Terminal
+
+4.) After the command is ran, you have a view of all the available access points in your vicinity.
+
+- Open a new Linux Terminal (optional)
+
+5.)  After you have selected your target, run
+# airodump-ng -c <ACCESS_POINT_CHANNEL> --bssid <ACCESS_POINT_BSSID> -w <FILENAME>(opt: .cap) <MONITORING_INTERFACE>
+
+- Open a new Linux Terminal
+
+6.) This command will filter that specific BSSID and give you details on it, such as possible clients that are connected to that Access Point. The next step is to collect as much data as possible, that data will be written to the <FILENAME> in the .cap format, any handshakes will be recorded and stored inside that file. The next thing you have to do is to try to grab the password from that access point. If the Access Point uses WPS than the tool Reaver will do the trick (it did for me most of the time)
+# reaver -i <MONITORING_INTERFACE> -b <ACCESS_POINT_BSSID> -vv (verbose) -w -K (pixiedust attack)
+
+or if the access point isn't equipped with WPS, than run
+# aireplay-ng -b <ACCESS_POINT_BSSID> --deauth <NUMBER_OF_DEAUTH_PROBES> <MONITORING_INTERFACE>
+
+If that attack succeeds, and the client re-authenticates, than you will have something called a handshake, this is simply a negotiation between the client and entity (you being the entity), this is written to <FILENAME>
+
+7.) Finally, once you have enough data and info (as well as a handshake) on the Access Point, it is time to run Aircrack-ng
+# aircrack-ng -b <ACCESS_POINT_BSSID> -e <ACCESS_POINT_ESSID> -w <PATH_TO_WORDLIST> <FILENAME>.cap 
+this will run through all the keys in the file containing the list of possible passwords and match them against the Access Point Data Variables and if it finds a match the password is displayed to you. If you are attacking a WEP encryption, you don't have to specify the -w <PATH_TO_WORDLIST> aircrack-ng has a built-in WEP wordlist.
