@@ -1,4 +1,4 @@
-1.) Acquire a(n) Kali Linux .iso disk image and put it on a virtual machine. Or if you are running Debian based or Ubuntu based, run sudo apt-get install aircrack-ng reaver wifite
+1.) Acquire a(n) Kali Linux .iso disk image and put it on a virtual machine (or on your hard drive). Or if you are running Debian based or Ubuntu based, run sudo apt-get install aircrack-ng reaver wifite
 
 2.) Once you have acquired those tools, you have to put your current NIC into monitoring mode, to do that run the command
 # airmon-ng start <NIC_INTERFACE_ID>
